@@ -80,7 +80,7 @@ public class PlayerMovement : MonoBehaviour
         if(sprinting)
         {
             Rigidbody ourBody = this.GetComponent<Rigidbody>();
-            float movement = Mathf.Lerp(0.0f, 0.2f, 0.7f);
+            float movement = Mathf.Lerp(0.0f, 0.13f, 0.7f);
             Vector3 moveSprint = new Vector3(0.0f, 0.0f, movement);
             moveSprint = ourBody.transform.TransformDirection(moveSprint);
             ourBody.transform.position += moveSprint;
