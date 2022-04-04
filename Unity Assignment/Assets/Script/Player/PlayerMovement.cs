@@ -25,10 +25,11 @@ public class PlayerMovement : MonoBehaviour
     {
         float v = Input.GetAxis("Vertical");
         bool sneak = Input.GetButton("Sneak");
+        bool sprint = Input.GetButton("Sprint");
         float turn = Input.GetAxis("Turn");
 
         Rotating(turn);
-        MovementManagement(v, sneak);
+        MovementManagement(v, sneak, sprint);
 
         elapsedTime += Time.deltaTime;
         //Debug.Log("Elapsed time is : " + elapsedTime);
@@ -44,9 +45,10 @@ public class PlayerMovement : MonoBehaviour
         AudioManagement(shout);
     }
 
-    void MovementManagement(float vertical, bool sneaking)
+    void MovementManagement(float vertical, bool sneaking, bool sprinting)
     {
         anim.SetBool(hash.sneakingBool, sneaking);
+        anim.SetBool(hash.sprintingBool, sprinting);
 
         if (vertical > 0)
         {
@@ -71,9 +73,17 @@ public class PlayerMovement : MonoBehaviour
         }
         if (vertical == 0)
         {
-            anim.SetFloat(hash.speedFloat, 0.01f);
-            anim.SetBool(hash.backwardsBool, false);
-            noBackMov = true;
+                anim.SetFloat(hash.speedFloat, 0.01f);
+                anim.SetBool(hash.backwardsBool, false);
+                noBackMov = true;           
+        }
+        if(sprinting)
+        {
+            Rigidbody ourBody = this.GetComponent<Rigidbody>();
+            float movement = Mathf.Lerp(0.0f, 0.2f, 0.7f);
+            Vector3 moveSprint = new Vector3(0.0f, 0.0f, movement);
+            moveSprint = ourBody.transform.TransformDirection(moveSprint);
+            ourBody.transform.position += moveSprint;
         }
     }
 
