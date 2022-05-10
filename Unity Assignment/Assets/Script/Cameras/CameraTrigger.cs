@@ -4,45 +4,26 @@ using UnityEngine;
 
 public class CameraTrigger : MonoBehaviour
 {
-    public Camera triggeredCam;
+    [SerializeField] KeyCode enterExitKey = KeyCode.P;
+
+    /*public Camera triggeredCam;
     public Camera liveCam;
-    public Camera followCam;
+    public Camera followCam;*/
+    public Camera shipCam;
+    public Camera playerCam;
 
-    private void Awake()
+    private void Start()
     {
-        liveCam = Camera.allCameras[0];
-    }
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        GameObject PlayerCharacter = GameObject.FindGameObjectWithTag("Player");
-        Collider PlayerCollider = PlayerCharacter.GetComponent<Collider>();
-        
-        if (other == PlayerCollider)
-        {
-            triggeredCam.enabled = true;
-            liveCam.enabled = false;
-
-            liveCam = Camera.allCameras[0];
-
-            triggeredCam.GetComponent<AudioListener>().enabled = true;
-        }
+        shipCam.enabled = false;
+        playerCam.enabled = true;
     }
 
-    private void OnTriggerExit(Collider other)
+    private void Update()
     {
-        GameObject PlayerCharacter = GameObject.FindGameObjectWithTag("Player");
-        Collider PlayerCollider = PlayerCharacter.GetComponent<Collider>();
-
-        if (other == PlayerCollider)
+        if (Input.GetKeyDown(enterExitKey))
         {
-            triggeredCam.enabled = false;
-            followCam.enabled = true;
-
-            liveCam = Camera.allCameras[0];
-
-            triggeredCam.GetComponent<AudioListener>().enabled = false;
-            PlayerCharacter.GetComponent<AudioListener>().enabled = true;
+            shipCam.enabled = !shipCam.enabled;
+            playerCam.enabled = !playerCam.enabled;
         }
     }
 }
