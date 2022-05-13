@@ -24,7 +24,7 @@ public class ShipInAndOut : MonoBehaviour
         ship.GetComponent<ShipControl>().enabled = false;
         shipCam.enabled = false;
         playerCam.enabled = true;
-        mouseControl = true;
+        mouseControl = false;
     }
 
     // Update is called once per frame

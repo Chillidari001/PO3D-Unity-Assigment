@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShipControl : MonoBehaviour
 {
-    public float forwardSpeed = 11f, strafeSpeed = 7f, hoverSpeed = 5f;
+    public float forwardSpeed = 8f, strafeSpeed = 6f, hoverSpeed = 5.5f;
     private float activeForwardSpeed, activeStrafeSpeed, activeHoverSpeed;
     private float forwardAcceleration = 1f, strafeAcceleration = 2f, hoverAcceleration = 2f;
 
@@ -14,6 +14,9 @@ public class ShipControl : MonoBehaviour
     public Transform blade2;
     private float bladeSpeed = 500;
 
+    public Transform gear;
+    private float gearSpeed = 100;
+
     public bool isGrounded;
     public float groundCheck;
     public LayerMask groundMask;
@@ -22,6 +25,8 @@ public class ShipControl : MonoBehaviour
     private Vector2 lookInput, screenCenter, mouseDistance;
 
     public ShipInAndOut controlScript;
+    
+    private Animator anim;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +35,8 @@ public class ShipControl : MonoBehaviour
         screenCenter.y = Screen.height * 0.5f;
 
         Cursor.lockState = CursorLockMode.Confined;
+
+        anim = GetComponent<Animator>();
     }
 
     private void FixedUpdate()
@@ -40,6 +47,20 @@ public class ShipControl : MonoBehaviour
         {
             blade1.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * bladeSpeed);
             blade2.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * bladeSpeed);
+
+            gear.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * gearSpeed);
+
+            if (GetComponent<Animator>())
+            {
+                anim.SetBool("inAir", true);
+            }
+        }
+        else
+        {
+            if (GetComponent<Animator>())
+            {
+                anim.SetBool("inAir", false);
+            }
         }
 
 
@@ -100,16 +121,30 @@ public class ShipControl : MonoBehaviour
         transform.position += transform.up * activeHoverSpeed * Time.deltaTime;
     }
 
+    void keyboardRotate()
+    {
+        Rigidbody ourBody = this.GetComponentInParent<Rigidbody>();
+        if (activeStrafeSpeed != 0)
+        {
+            Quaternion deltaRotation = Quaternion.Euler(0f, activeStrafeSpeed * Time.deltaTime * 1.1f, 0f);
+
+            ourBody.MoveRotation(ourBody.rotation * deltaRotation);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
         if (controlScript.mouseControl)
         {
+            GetComponent<Animator>().enabled = false;
             mouseMovement();
         }
         if (!controlScript.mouseControl)
         {
+            GetComponent<Animator>().enabled = true;
             regularMovement();
+            keyboardRotate();
         }
     }
 }
