@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ShipControl : MonoBehaviour
 {
-    public float forwardSpeed = 8f, strafeSpeed = 6f, hoverSpeed = 5.5f;
+    public float forwardSpeed = 8f, strafeSpeed = 2f, hoverSpeed = 5.5f;
     private float activeForwardSpeed, activeStrafeSpeed, activeHoverSpeed;
     private float forwardAcceleration = 1f, strafeAcceleration = 2f, hoverAcceleration = 2f;
 
@@ -13,6 +13,13 @@ public class ShipControl : MonoBehaviour
     public Transform blade1;
     public Transform blade2;
     private float bladeSpeed = 500;
+
+    [SerializeField]public Transform arm;
+    [Header("Claw Input")]
+    [SerializeField] KeyCode clawUp = KeyCode.Alpha2;
+    [SerializeField] KeyCode clawDown = KeyCode.Alpha1;
+    private float clawSpeed = 50;
+
 
     public Transform gear;
     private float gearSpeed = 100;
@@ -69,7 +76,7 @@ public class ShipControl : MonoBehaviour
             blade1.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * bladeSpeed);
             blade2.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * bladeSpeed);
         }
-        if(Input.GetKey(KeyCode.LeftControl))
+        if(Input.GetKey(KeyCode.C))
         {
             blade1.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * bladeSpeed);
             blade2.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * bladeSpeed);
@@ -88,6 +95,7 @@ public class ShipControl : MonoBehaviour
             blade2.Rotate(new Vector3(0, 0, 1) * Time.deltaTime * bladeSpeed);
         }
 
+        clawMovement();
     }
 
     void mouseMovement()
@@ -129,6 +137,18 @@ public class ShipControl : MonoBehaviour
             Quaternion deltaRotation = Quaternion.Euler(0f, activeStrafeSpeed * Time.deltaTime * 1.1f, 0f);
 
             ourBody.MoveRotation(ourBody.rotation * deltaRotation);
+        }
+    }
+
+    void clawMovement()
+    {
+        if (Input.GetKey(clawUp))
+        {
+            arm.Rotate(new Vector3(0, 0, 5) * Time.deltaTime * clawSpeed);
+        }
+        if (Input.GetKey(clawDown))
+        {
+            arm.Rotate(new Vector3(0, 0, -5) * Time.deltaTime * clawSpeed);
         }
     }
 

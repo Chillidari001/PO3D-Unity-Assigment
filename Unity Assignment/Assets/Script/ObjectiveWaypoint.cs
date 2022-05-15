@@ -56,9 +56,5 @@ public class ObjectiveWaypoint : MonoBehaviour
         img.transform.position = pos;
         meters.text = ((int)Vector3.Distance(target.position, cam.transform.position)).ToString() + "m";
 
-        if (Vector3.Distance(target.position, cam.transform.forward) <= 100)
-        {
-            img.enabled = false;
-        }
     }
 }
